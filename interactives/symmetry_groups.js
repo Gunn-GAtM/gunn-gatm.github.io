@@ -13,6 +13,8 @@ import {AxisObject} from "./axis_object.js"
 
 Object.assign(window, { THREE })
 
+let STARTING_POS = new Vector3(-5, 0, -3)
+
 // Styling info for y'all
 // You can just set the value in styles and it will automatically update
 let styles = {
@@ -62,7 +64,7 @@ DOM.allow3DRotation.addEventListener("input", () => {
   mainDomain.allow3DRotation(DOM.allow3DRotation.checked)
 })
 
-const mainDomain = new VisDomain({ defaultCameraPosition: new Vector3(0, SIZE / 2, 0) })
+const mainDomain = new VisDomain({ defaultCameraPosition: new Vector3(0, SIZE / 2, 5), defaultCameraTarget: STARTING_POS })
 mainDomain.attachToElement(DOM.mainSurface)
 
 const mainGrid = new GridHelper(gridSize, gridDivisions)
@@ -110,10 +112,12 @@ function resetAll () {
 
   miniatureDomain.scene.add(miniatureSym)
   miniatureDomain.setDefaultCamera()
-  mainDomain.setDefaultCamera()
 
   clearRotateButtons()
   toggleReflectButton(true)
+
+    mainDomain.setDefaultCamera()
+    //miniatureDomain.setDefaultCamera()
 }
 
 function setShape (shape) {
@@ -125,8 +129,6 @@ function setShape (shape) {
 }
 
 let queue = []
-
-let STARTING_POS = new Vector3(-5, 0, -3)
 
 function allowClick (o) {
     o.clickable = true
@@ -208,6 +210,7 @@ function demonstrateCongaLine () {
     if (congaLine.length <= 1) return
 
   if (congaInMotion) return
+    mainDomain.setDefaultCamera()
 
   let first = congaLine[0]
     let last = congaLine[congaLine.length - 1]

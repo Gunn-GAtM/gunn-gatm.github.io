@@ -38,6 +38,7 @@ class VisDomain {
     this.scene = new VisScene()
     this.camera = new PerspectiveCamera( 70, 0, 0.0001, 1000 )
     this.defaultCameraPosition = params.defaultCameraPosition ?? new Vector3(1, 1, 1)
+    this.defaultCameraTarget = params.defaultCameraTarget ?? new Vector3()
     this.renderer.setPixelRatio(window.devicePixelRatio)
 
     // Parent element in DOM
@@ -130,16 +131,24 @@ class VisDomain {
 
   setDefaultCamera() {
     let { camera, orbitControls } = this
+    let target = this.defaultCameraTarget
 
     camera.position.copy(this.defaultCameraPosition)
-    camera.lookAt(0, 0, 0)
+    camera.up.set( 0, 1, 0 );
+    camera.lookAt(...target.toArray())
 
-    this.orbitControls.update()
+    console.log(target)
+
+    camera.updateProjectionMatrix()
 
     this.hasOrbitControlsEverInitialized ? orbitControls.saveState() : orbitControls.reset()
     orbitControls.saveState()
+    orbitControls.target.set(...target.toArray())
 
     this.hasOrbitControlsEverInitialized  = true
+
+
+    this.orbitControls.update()
   }
 
   init () {

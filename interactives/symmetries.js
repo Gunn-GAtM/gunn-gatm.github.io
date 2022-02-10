@@ -29,7 +29,7 @@ export class SymmetricShape {
     this.normalizeVertexDimensions()
 
     let generators = params.generators?.map(g => Array.isArray(g) ? new Motion(g) : motionFromMatrix(this, g)) ?? []
-    generators.map((g, i) => { if (!g) throw new Error(`Generator at index ${i} is fucked up`)})
+    generators.map((g, i) => { if (!g) throw new Error(`Generator at index ${i} is not a valid symmetry of the object`)})
 
     let group = this.fullSymmetryGroup = computeSymmetryGroup(this, generators)
 
@@ -269,7 +269,7 @@ function computeSymmetryGroup(shape, generators=[]) {
 
   do {
     prevLen = elems.length
-    if (prevLen > 240) throw new Error("FJIWF:OLIWEJF:OWIJEF")
+    if (prevLen > 240) throw new Error("The symmetry group is too large")
 
     for (let i = 0; i < prevLen; ++i) {
       let m1 = elems[i]
@@ -294,7 +294,7 @@ function closelyEquilinear (v1, v2) {
   if (Math.abs(v2.x) < 1e-6) {
     if (Math.abs(v2.y) < 1e-6) {
       if (Math.abs(v2.z) < 1e-6) {
-        throw new Error("FOPIWEJFPOIWEJFPOWIJEFPOWIJEFPO")
+        throw new Error("The vector is too close to zero for equilinearity to be established")
       } else {
         r = v1.z / v2.z
       }
